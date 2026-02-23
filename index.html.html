@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Patterson Dental — Field Assessment</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%231B2A4A'/><text x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold' font-size='18'>P</text></svg>">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    :root{--navy:#1B2A4A;--blue:#2E6BA6;--light-blue:#D6EBF5;--sky:#EBF5FB;--white:#FFF;--g50:#F9FAFB;--g100:#F3F4F6;--g200:#E5E7EB;--g400:#9CA3AF;--g500:#6B7280;--g700:#374151;--g900:#111827;--green:#059669;--green-lt:#D1FAE5}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--g50);color:var(--g900);line-height:1.6;min-height:100vh;-webkit-font-smoothing:antialiased}
+    .header{background:linear-gradient(135deg,var(--navy),var(--blue));padding:2rem 1.25rem 1.75rem;text-align:center}
+    .header h1{color:var(--white);font-size:1.125rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;margin-bottom:.35rem}
+    .header p{color:var(--light-blue);font-size:.9375rem}
+    .container{max-width:640px;margin:0 auto;padding:0 1rem 3rem}
+    .info-bar{background:var(--sky);border-left:3px solid var(--blue);padding:.875rem 1rem;margin:1.25rem 0;border-radius:0 8px 8px 0;font-size:.8125rem;color:var(--g700);line-height:1.5}
+    .info-bar strong{color:var(--navy)}
+    .section-label{font-size:.6875rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--blue);margin:1.75rem 0 .75rem;padding-left:.125rem}
+    .q-card{background:var(--white);border-radius:12px;padding:1.25rem;margin-bottom:.875rem;box-shadow:0 1px 3px rgba(0,0,0,.06);border:1px solid var(--g200);transition:border-color .2s}
+    .q-card.answered{border-color:var(--blue)}
+    .q-num{display:inline-flex;align-items:center;justify-content:center;background:var(--navy);color:var(--white);font-size:.6875rem;font-weight:700;width:1.375rem;height:1.375rem;border-radius:50%;margin-right:.5rem;flex-shrink:0}
+    .q-text-wrap{display:flex;align-items:flex-start}
+    .q-text{flex:1;font-size:.9375rem;font-weight:500;color:var(--g900);line-height:1.5;margin-bottom:1rem}
+    .scale-row{display:flex;width:100%}
+    .scale-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:.25rem;padding:.625rem .25rem;border:1.5px solid var(--g200);background:var(--white);cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent;border-left:none}
+    .scale-btn:first-child{border-left:1.5px solid var(--g200);border-radius:8px 0 0 8px}
+    .scale-btn:last-child{border-radius:0 8px 8px 0}
+    .scale-btn .num{font-size:1.125rem;font-weight:700;color:var(--g400);transition:color .15s}
+    .scale-btn .lbl{font-size:.5625rem;color:var(--g400);text-align:center;line-height:1.2;transition:color .15s}
+    .scale-btn.selected{background:var(--navy);border-color:var(--navy)}
+    .scale-btn.selected+.scale-btn{border-left-color:var(--navy)}
+    .scale-btn.selected .num{color:var(--white)}
+    .scale-btn.selected .lbl{color:rgba(255,255,255,.85)}
+    .scale-btn:active{transform:scale(.97)}
+    textarea{width:100%;min-height:100px;border:1.5px solid var(--g200);border-radius:8px;padding:.75rem;font-family:inherit;font-size:.9375rem;line-height:1.5;color:var(--g900);background:var(--g50);resize:vertical;transition:border-color .2s,box-shadow .2s;-webkit-appearance:none}
+    textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(46,107,166,.12);background:var(--white)}
+    textarea::placeholder{color:var(--g400)}
+    .progress-wrap{position:sticky;top:0;z-index:10;background:var(--white);padding:.5rem 1rem;border-bottom:1px solid var(--g200);display:flex;align-items:center;gap:.75rem}
+    .progress-bar{flex:1;height:6px;background:var(--g200);border-radius:3px;overflow:hidden}
+    .progress-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--navy));border-radius:3px;transition:width .3s;width:0%}
+    .progress-text{font-size:.75rem;font-weight:600;color:var(--g500);white-space:nowrap}
+    .submit-wrap{margin-top:1.5rem}
+    .submit-btn{width:100%;padding:1rem;background:linear-gradient(135deg,var(--navy),var(--blue));color:var(--white);font-size:1rem;font-weight:600;border:none;border-radius:12px;cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent;letter-spacing:.02em}
+    .submit-btn:active{transform:scale(.98);opacity:.9}
+    .submit-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+    .submit-note{text-align:center;font-size:.75rem;color:var(--g400);margin-top:.75rem}
+    .success-screen{display:none;text-align:center;padding:4rem 2rem}
+    .success-screen.show{display:block}
+    .success-icon{width:72px;height:72px;background:var(--green-lt);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem}
+    .success-icon svg{width:36px;height:36px;color:var(--green)}
+    .success-screen h2{color:var(--g900);font-size:1.375rem;margin-bottom:.75rem}
+    .success-screen p{color:var(--g500);font-size:.9375rem;line-height:1.6;max-width:380px;margin:0 auto}
+    .error-msg{background:#FEF2F2;border:1px solid #FECACA;color:#991B1B;padding:.75rem 1rem;border-radius:8px;font-size:.875rem;margin-bottom:1rem;display:none}
+    .error-msg.show{display:block}
+    .form-content.hidden{display:none}
+    .spinner{display:inline-block;width:18px;height:18px;border:2.5px solid rgba(255,255,255,.3);border-top-color:white;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:.5rem}
+    @keyframes spin{to{transform:rotate(360deg)}}
+  </style>
+</head>
+<body>
+<div class="header">
+  <h1>Patterson Dental</h1>
+  <p>Field Sales Technology &amp; Support Assessment</p>
+</div>
+<div class="progress-wrap">
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-text" id="progressText">0 / 9</div>
+</div>
+<div class="container">
+  <div class="form-content" id="formContent">
+    <div class="info-bar">
+      This survey is <strong>anonymous</strong> and takes about <strong>3 minutes</strong>. Your candid feedback helps leadership evaluate how to better support reps in the field.
+    </div>
+    <div class="error-msg" id="errorMsg"></div>
+    <div class="section-label">Rate Your Agreement</div>
+
+    <div class="q-card" id="card-q1">
+      <div class="q-text-wrap"><span class="q-num">1</span><div class="q-text">Do you feel Patterson has equipped you with all the tools you need to be effective in the field?</div></div>
+      <div class="scale-row" data-question="q1">
+        <button class="scale-btn" data-value="1" type="button"><span class="num">1</span><span class="lbl">Strongly Disagree</span></button>
+        <button class="scale-btn" data-value="2" type="button"><span class="num">2</span><span class="lbl">Disagree</span></button>
+        <button class="scale-btn" data-value="3" type="button"><span class="num">3</span><span class="lbl">Neutral</span></button>
+        <button class="scale-btn" data-value="4" type="button"><span class="num">4</span><span class="lbl">Agree</span></button>
+        <button class="scale-btn" data-value="5" type="button"><span class="num">5</span><span class="lbl">Strongly Agree</span></button>
+      </div>
+    </div>
+
+    <div class="q-card" id="card-q2">
+      <div class="q-text-wrap"><span class="q-num">2</span><div class="q-text">When new products or partner solutions are introduced, I receive enough training and support to present them confidently to my customers.</div></div>
+      <div class="scale-row" data-question="q2">
+        <button class="scale-btn" data-value="1" type="button"><span class="num">1</span><span class="lbl">Strongly Disagree</span></button>
+        <button class="scale-btn" data-value="2" type="button"><span class="num">2</span><span class="lbl">Disagree</span></button>
+        <button class="scale-btn" data-value="3" type="button"><span class="num">3</span><span class="lbl">Neutral</span></button>
+        <button class="scale-btn" data-value="4" type="button"><span class="num">4</span><span class="lbl">Agree</span></button>
+        <button class="scale-btn" data-value="5" type="button"><span class="num">5</span><span class="lbl">Strongly Agree</span></button>
+      </div>
+    </div>
+
+    <div class="q-card" id="card-q3">
+      <div class="q-text-wrap"><span class="q-num">3</span><div class="q-text">The time I spend on administrative work (data entry, looking up information, organizing my schedule) does not significantly cut into my selling time.</div></div>
+      <div class="scale-row" data-question="q3">
+        <button class="scale-btn" data-value="1" type="button"><span class="num">1</span><span class="lbl">Strongly Disagree</span></button>
+        <button class="scale-btn" data-value="2" type="button"><span class="num">2</span><span class="lbl">Disagree</span></button>
+        <button class="scale-btn" data-value="3" type="button"><span class="num">3</span><span class="lbl">Neutral</span></button>
+        <button class="scale-btn" data-value="4" type="button"><span class="num">4</span><span class="lbl">Agree</span></button>
+        <button class="scale-btn" data-value="5" type="button"><span class="num">5</span><span class="lbl">Strongly Agree</span></button>
+      </div>
+    </div>
+
+    <div class="q-card" id="card-q4">
+      <div class="q-text-wrap"><span class="q-num">4</span><div class="q-text">When customers ask about technology solutions — AI, practice analytics, imaging tools — I feel confident having that conversation.</div></div>
+      <div class="scale-row" data-question="q4">
+        <button class="scale-btn" data-value="1" type="button"><span class="num">1</span><span class="lbl">Strongly Disagree</span></button>
+        <button class="scale-btn" data-value="2" type="button"><span class="num">2</span><span class="lbl">Disagree</span></button>
+        <button class="scale-btn" data-value="3" type="button"><span class="num">3</span><span class="lbl">Neutral</span></button>
+        <button class="scale-btn" data-value="4" type="button"><span class="num">4</span><span class="lbl">Agree</span></button>
+        <button class="scale-btn" data-value="5" type="button"><span class="num">5</span><span class="lbl">Strongly Agree</span></button>
+      </div>
+    </div>
+
+    <div class="q-card" id="card-q5">
+      <div class="q-text-wrap"><span class="q-num">5</span><div class="q-text">Compared to competitors, I believe Patterson gives its field reps an advantage when it comes to tools and resources.</div></div>
+      <div class="scale-row" data-question="q5">
+        <button class="scale-btn" data-value="1" type="button"><span class="num">1</span><span class="lbl">Strongly Disagree</span></button>
+        <button class="scale-btn" data-value="2" type="button"><span class="num">2</span><span class="lbl">Disagree</span></button>
+        <button class="scale-btn" data-value="3" type="button"><span class="num">3</span><span class="lbl">Neutral</span></button>
+        <button class="scale-btn" data-value="4" type="button"><span class="num">4</span><span class="lbl">Agree</span></button>
+        <button class="scale-btn" data-value="5" type="button"><span class="num">5</span><span class="lbl">Strongly Agree</span></button>
+      </div>
+    </div>
+
+    <div class="q-card" id="card-q6">
+      <div class="q-text-wrap"><span class="q-num">6</span><div class="q-text">Corporate training programs and initiatives translate into strategies I can actually use in my day-to-day territory work.</div></div>
+      <div class="scale-row" data-question="q6">
+        <button class="scale-btn" data-value="1" type="button"><span class="num">1</span><span class="lbl">Strongly Disagree</span></button>
+        <button class="scale-btn" data-value="2" type="button"><span class="num">2</span><span class="lbl">Disagree</span></button>
+        <button class="scale-btn" data-value="3" type="button"><span class="num">3</span><span class="lbl">Neutral</span></button>
+        <button class="scale-btn" data-value="4" type="button"><span class="num">4</span><span class="lbl">Agree</span></button>
+        <button class="scale-btn" data-value="5" type="button"><span class="num">5</span><span class="lbl">Strongly Agree</span></button>
+      </div>
+    </div>
+
+    <div class="section-label">Open Feedback</div>
+
+    <div class="q-card" id="card-q7">
+      <div class="q-text-wrap"><span class="q-num">7</span><div class="q-text">What tools or resources would better serve you in the field? If you could have anything built to help you, what would it do?</div></div>
+      <textarea data-question="q7" placeholder="Describe the tool, resource, or support that would make the biggest difference..."></textarea>
+    </div>
+
+    <div class="q-card" id="card-q8">
+      <div class="q-text-wrap"><span class="q-num">8</span><div class="q-text">What are your biggest pain points in your day-to-day workflow? What slows you down or frustrates you most?</div></div>
+      <textarea data-question="q8" placeholder="Think about what takes up your time, what's harder than it should be..."></textarea>
+    </div>
+
+    <div class="q-card" id="card-q9">
+      <div class="q-text-wrap"><span class="q-num">9</span><div class="q-text">Is there anything else you'd like leadership to know about the support you need to be more effective?</div></div>
+      <textarea data-question="q9" placeholder="Optional — share anything on your mind..."></textarea>
+    </div>
+
+    <div class="submit-wrap">
+      <button class="submit-btn" id="submitBtn" type="button">Submit Feedback</button>
+      <div class="submit-note">Your responses are completely anonymous</div>
+    </div>
+  </div>
+
+  <div class="success-screen" id="successScreen">
+    <div class="success-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+    <h2>Thank You!</h2>
+    <p>Your feedback has been submitted. It will help leadership make better decisions about the tools and support Patterson provides to the field.</p>
+  </div>
+</div>
+
+<script>
+const SB_URL="https://nikmunvfqtvzzwgiyvem.supabase.co";
+const SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5pa211bnZmcXR2enp3Z2l5dmVtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA4MzQ5OTUsImV4cCI6MjA4NjQxMDk5NX0.PUzcPaJAZrqLhMb6jepGElLdu4P9OBgga0oVz-d9MDQ";
+const answers={},TOTAL=9;
+
+document.querySelectorAll(".scale-row").forEach(row=>{
+  const q=row.dataset.question;
+  row.querySelectorAll(".scale-btn").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      row.querySelectorAll(".scale-btn").forEach(b=>b.classList.remove("selected"));
+      btn.classList.add("selected");
+      answers[q]=parseInt(btn.dataset.value);
+      document.getElementById("card-"+q).classList.add("answered");
+      updateProgress();
+    });
+  });
+});
+
+document.querySelectorAll("textarea").forEach(ta=>{
+  const q=ta.dataset.question;
+  ta.addEventListener("input",()=>{
+    const v=ta.value.trim();
+    if(v){answers[q]=v}else{delete answers[q]}
+    document.getElementById("card-"+q).classList.toggle("answered",!!v);
+    updateProgress();
+  });
+});
+
+function updateProgress(){
+  const c=Object.keys(answers).length;
+  document.getElementById("progressFill").style.width=((c/TOTAL)*100)+"%";
+  document.getElementById("progressText").textContent=c+" / "+TOTAL;
+}
+
+document.getElementById("submitBtn").addEventListener("click",async()=>{
+  const errEl=document.getElementById("errorMsg");
+  errEl.classList.remove("show");
+  const req=["q1","q2","q3","q4","q5","q6"];
+  const miss=req.filter(q=>!answers[q]);
+  if(miss.length){
+    errEl.textContent="Please answer all 6 rated questions before submitting.";
+    errEl.classList.add("show");
+    const f=document.getElementById("card-"+miss[0]);
+    f.scrollIntoView({behavior:"smooth",block:"center"});
+    f.style.boxShadow="0 0 0 3px rgba(239,68,68,0.3)";
+    setTimeout(()=>f.style.boxShadow="",2000);
+    return;
+  }
+  const btn=document.getElementById("submitBtn");
+  btn.disabled=true;
+  btn.innerHTML='<span class="spinner"></span>Submitting...';
+  try{
+    const res=await fetch(SB_URL+"/rest/v1/survey_responses",{
+      method:"POST",
+      headers:{"Content-Type":"application/json","apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Prefer":"return=minimal"},
+      body:JSON.stringify({
+        q1_tools_equipped:answers.q1,
+        q2_training_support:answers.q2,
+        q3_admin_time:answers.q3,
+        q4_ai_confidence:answers.q4,
+        q5_competitive_position:answers.q5,
+        q6_corporate_to_field:answers.q6,
+        q7_tools_wished:answers.q7||null,
+        q8_pain_points:answers.q8||null,
+        q9_anything_else:answers.q9||null
+      })
+    });
+    if(!res.ok)throw new Error(res.status);
+    document.getElementById("formContent").classList.add("hidden");
+    document.getElementById("successScreen").classList.add("show");
+    document.querySelector(".progress-wrap").style.display="none";
+  }catch(e){
+    errEl.textContent="Something went wrong. Please try again.";
+    errEl.classList.add("show");
+    btn.disabled=false;
+    btn.textContent="Submit Feedback";
+  }
+});
+</script>
+</body>
+</html>
